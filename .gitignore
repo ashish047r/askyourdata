@@ -1,0 +1,14 @@
+.env
+*.env
+!.env.example
+venv/
+.venv/
+__pycache__/
+*.pyc
+staticfiles/
+evals/reports/
+evals/judge_labels.todo.jsonl
+client_secret*.json
+client_secrets.json
+*_token.json
+.DS_Store

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Sign in · AskYourData{% endblock %}
+{% block body %}
+<main class="login">
+  <form method="post" class="card login-card">
+    {% csrf_token %}
+    <h1>AskYourData</h1>
+    <p class="muted">Ask GA4 and Google Ads questions in plain English.</p>
+    {% if form.errors %}<p class="notice notice-error" role="alert">Wrong username or password.</p>{% endif %}
+    <label for="id_username">Username</label>
+    <input id="id_username" name="username" autocomplete="username" required autofocus>
+    <label for="id_password">Password</label>
+    <input id="id_password" name="password" type="password" autocomplete="current-password" required>
+    <button type="submit" class="btn">Sign in</button>
+  </form>
+</main>
+{% endblock %}

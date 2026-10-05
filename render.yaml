@@ -1,0 +1,41 @@
+# Render Blueprint: New > Blueprint > pick this repo. Secrets marked sync:false are entered in the dashboard.
+services:
+  - type: web
+    name: askyourdata
+    runtime: python
+    plan: free
+    region: singapore  # same region as the Neon database: fewer ms per query
+    buildCommand: >-
+      pip install -r requirements.txt &&
+      python manage.py collectstatic --noinput &&
+      python manage.py migrate --noinput &&
+      python manage.py createcachetable
+    # 1 worker x 4 threads keeps memory inside the free 512 MB; LLM calls are I/O-bound so threads are enough.
+    startCommand: gunicorn config.wsgi --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 60
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.8"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "0"
+      - key: ALLOWED_HOSTS
+        value: askyourdata.onrender.com
+      - key: OPENAI_MODEL
+        value: gpt-5-mini
+      - key: DAILY_COST_CAP_USD
+        value: "0.50"
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_URL_RO
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: LANGFUSE_PUBLIC_KEY
+        sync: false
+      - key: LANGFUSE_SECRET_KEY
+        sync: false
+      - key: LANGFUSE_BASE_URL
+        value: https://cloud.langfuse.com

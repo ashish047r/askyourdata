@@ -1,0 +1,20 @@
+{
+  "prompt_version": "v2",
+  "model": "gpt-5-mini",
+  "cases": 100,
+  "execution_accuracy": 0.97,
+  "by_tag": {
+    "ads": 0.975,
+    "cross": 0.9,
+    "ga4": 1.0
+  },
+  "valid_sql_rate": 1.0,
+  "retry_rate": 0.03,
+  "clarify_rate": 0.0,
+  "crashed_cases": 0,
+  "faithfulness": 1.0,
+  "latency_p50_ms": 8571,
+  "latency_p95_ms": 15261,
+  "avg_cost_usd": 0.00154,
+  "total_cost_usd": 0.1544
+}

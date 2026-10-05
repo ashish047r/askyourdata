@@ -1,0 +1,32 @@
+name: daily-sync
+on:
+  schedule:
+    - cron: "30 0 * * *"  # 06:00 IST every day
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      DJANGO_SECRET_KEY: sync-only
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL_RO: ${{ secrets.DATABASE_URL_RO }}
+      OPENAI_API_KEY: not-needed
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+      GOOGLE_ADS_DEVELOPER_TOKEN: ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
+      GOOGLE_ADS_LOGIN_CUSTOMER_ID: ${{ secrets.GOOGLE_ADS_LOGIN_CUSTOMER_ID }}
+      GOOGLE_ADS_API_VERSION: ${{ secrets.GOOGLE_ADS_API_VERSION }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+          cache: pip
+      - run: pip install -r requirements.txt
+      # Keep the public demo client current (its data is relative to today).
+      - run: python manage.py seed_demo
+      # Re-pull 30 days so late-attributed Ads conversions are picked up (upsert = idempotent).
+      - if: env.GOOGLE_REFRESH_TOKEN != ''
+        run: python manage.py sync_data --days 30

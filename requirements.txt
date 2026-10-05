@@ -1,0 +1,22 @@
+# web
+Django==6.1.1
+djangorestframework==3.18.1
+psycopg[binary]==3.3.6
+dj-database-url==3.1.2
+whitenoise==6.12.0
+gunicorn==26.2.0
+python-dotenv==1.2.4
+# AI
+langchain-core==1.6.6
+langchain-openai==1.6.7
+langgraph==1.2.12
+langchain==1.4.3        # required by the Langfuse LangChain callback
+langfuse==4.16.0
+sqlglot==30.21.0
+pgvector==0.5.0
+numpy==2.5.3            # LangChain InMemoryVectorStore (few-shot selection) + cache-pair eval
+# Google data sync
+google-analytics-data==0.23.3
+google-auth==2.59.1
+google-auth-oauthlib==1.5.0
+requests==2.34.2

@@ -1,0 +1,41 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DJANGO_SECRET_KEY: ci-only
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+      DATABASE_URL_RO: postgresql://askdata_ro:ci_ro_password_123@localhost:5432/postgres
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'not-set' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Guardrail red-team + scoring tests (no DB, no LLM)
+        run: python agent/core/test_core.py
+      - name: Integration tests (Postgres RLS, cache, API; LLM mocked)
+        run: python manage.py test
+      # Real LLM eval gate: on PRs and manual runs only (costs ~US$0.50 per 100 questions with the judge).
+      - name: Eval gate
+        if: github.event_name != 'push' && env.OPENAI_API_KEY != 'not-set'
+        run: |
+          python manage.py migrate --noinput
+          python manage.py seed_demo
+          python manage.py run_evals --client demo --judge --gate evals/baseline.json

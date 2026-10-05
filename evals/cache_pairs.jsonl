@@ -1,0 +1,18 @@
+{"a": "sessions by device last 30 days", "b": "Show me sessions broken down by device for the last 30 days", "same": true}
+{"a": "What was our total ad spend in the last 30 days?", "b": "How much did we spend on ads over the past 30 days?", "same": true}
+{"a": "Top 5 campaigns by conversions last month", "b": "Which 5 campaigns got the most conversions last month?", "same": true}
+{"a": "CTR by campaign for the last 30 days", "b": "click-through rate per campaign, last 30 days", "same": true}
+{"a": "Revenue by device this month", "b": "This month's revenue split by device", "same": true}
+{"a": "sessions last 7 days", "b": "sessions last 30 days", "same": false}
+{"a": "Top 3 campaigns by cost", "b": "Top 5 campaigns by cost", "same": false}
+{"a": "top campaigns by cost last month", "b": "top campaigns by conversions last month", "same": false}
+{"a": "mobile sessions yesterday", "b": "desktop sessions yesterday", "same": false}
+{"a": "organic sessions last 30 days", "b": "paid sessions last 30 days", "same": false}
+{"a": "spend this month", "b": "spend last month", "same": false}
+{"a": "CPA by campaign last 7 days", "b": "ROAS by campaign last 7 days", "same": false}
+{"a": "weekly sessions for the last 4 weeks", "b": "monthly sessions for the last 4 months", "same": false}
+{"a": "Which campaign spent the most last month?", "b": "Which campaign spent the least last month?", "same": false}
+{"a": "key events by medium last 30 days", "b": "sessions by medium last 30 days", "same": false}
+{"a": "How many clicks did we get last month?", "b": "Total clicks last month", "same": true}
+{"a": "engagement rate by device last 30 days", "b": "engagement rate by device last 30 days please", "same": true}
+{"a": "conversions yesterday", "b": "conversion value yesterday", "same": false}
