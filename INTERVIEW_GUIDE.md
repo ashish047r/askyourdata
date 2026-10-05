@@ -473,6 +473,8 @@ python manage.py run_evals --calibrate-judge                        # judge vs y
 5. **Semantic cache "7 days vs 30 days":** fixed with the constraint guard (§9.3).
 6. **Eval network crash:** one Neon connection timeout killed the whole 100-question run. Fixed with a connect retry (3 tries) and per-question crash isolation (`crashed_cases` in the summary).
 7. **Stale demo data and an ambiguous gold question:** 2 of the 3 v2 "failures" weren't model errors. Lesson: **read the failures before trusting the score.** Fixed with a stale-data warning, a daily demo refresh, and rewording the question.
+8. **First Render deploy timed out:** `ALLOWED_HOSTS` was hard-coded to `askyourdata.onrender.com`, but that name was taken and Render assigned `askyourdata-i1q5.onrender.com`. Django rejected every request (`DisallowedHost`), including the `/healthz` health check, so the deploy never went live. Fixed by reading Render's `RENDER_EXTERNAL_HOSTNAME` env var, so it works with whatever hostname is assigned.
+9. **OpenAI credit ran out in production:** the user saw a clean "AI service error: RateLimitError", nothing was cached, and the Render log showed `insufficient_quota`, so diagnosis took one log line. Lesson: graceful degradation plus logging the provider's error code. Auto-recharge stays off so a bug can't drain the card; the app's daily cost cap is the second net.
 
 ---
 

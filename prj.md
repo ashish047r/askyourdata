@@ -21,11 +21,11 @@ This file is the single source of truth for how the project works. For plain-lan
 | SQL guard, read-only role, row-level security (RLS), DB-level attack tests | ✅ built, tested on real Postgres 16 |
 | Exact + semantic cache (pgvector) with constraint guard | ✅ built, tested on real Postgres |
 | Cost tracking, daily cost cap, rate limit, query log, feedback | ✅ built, tested |
-| Langfuse tracing with data masking | ✅ built; masking unit-tested. ⚠️ Not yet sent to a real Langfuse project |
+| Langfuse tracing with data masking | ✅ live: every node traced, `rows` verified `[masked]` in Langfuse cloud |
 | Eval runner: 100-case golden set, judge, calibration, cache-pair tuning, CI gate | ✅ **Run for real: 90% (v1) → 97% (v2) execution accuracy, 100% faithfulness**, baseline committed |
 | GA4 + Google Ads sync | ✅ written. ⚠️ Not run against the live Google APIs (needs your OAuth and developer token) |
 | Real OpenAI calls (gpt-5-mini) | ✅ live: about 8.6 s typical, about $0.0015 per question; cached repeat 0.4 s / $0 |
-| Deploy (Render + Neon), GitHub Actions CI + daily sync | ✅ config written (`render.yaml`, `.github/workflows/`). ⚠️ You deploy it (§15) |
+| Deploy (Render + Neon), GitHub Actions CI + daily sync | ✅ live on Render (Singapore); `/healthz` ok; daily-sync workflow green |
 | Streaming answers | ❌ deliberately skipped. The UI shows a live timer instead. Add only if people complain about waiting. |
 
 > **Resume rule:** put numbers on your resume only after §15 is done and they come from your own `evals/reports/*.json`. Never quote the mocked numbers from development.
@@ -473,7 +473,7 @@ python manage.py runserver      # http://localhost:8000
 10. **Render:**
     1. New → Blueprint → pick the repo (`render.yaml`).
     2. Fill in the `sync: false` secrets.
-    3. Set `ALLOWED_HOSTS` to your onrender.com hostname.
+    3. `ALLOWED_HOSTS` is automatic: settings adds Render's `RENDER_EXTERNAL_HOSTNAME` (e.g. `askyourdata-i1q5.onrender.com`).
     4. Create the team's users in `/admin/`.
 11. **Langfuse (optional):** create a free cloud project and set the 3 env vars on Render.
 12. **Confirm in writing** with your manager that sending aggregated client analytics to the OpenAI API is approved.
@@ -483,10 +483,9 @@ python manage.py runserver      # http://localhost:8000
 ## 16. Known limitations and honest notes
 
 - **Unverified until you run it:**
-  - live OpenAI behaviour (accuracy, latency, whether `gpt-5-mini` always fills the structured output),
   - the live GA4 and Ads API sync,
-  - whether Neon allows `CREATE ROLE` from SQL,
-  - the Render deploy.
+  - judge–human agreement (calibration not run yet).
+- **Verified live:** OpenAI behaviour (evals), Neon `CREATE ROLE` from SQL, the Render deploy, Langfuse masking.
 - **Execution accuracy undercounts** answers that are right but formatted differently (§10). Read the failures.
 - **The semantic-cache constraint guard is a keyword heuristic.** It errs toward missing (safe). Synonyms such as "CTR" vs "click-through rate" won't share an answer.
 - **The free tier sleeps.** The first request after 15 min idle takes about a minute. The UI says so.
