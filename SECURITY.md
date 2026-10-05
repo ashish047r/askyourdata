@@ -126,7 +126,7 @@ Rejects unless **all** of these hold:
   - the schema doc and examples (no client data)
   - ≤ 50 aggregated result rows for summarization
 - **Never sent to OpenAI:** user-level PII. GA4 data is aggregated daily by source/medium/device.
-- **Hardening:** Langfuse traces mask result rows (only the SQL and metadata are traced).
+- **Hardening:** Langfuse traces mask raw result rows and vectors. The question, SQL, the 1–3 sentence answer and timings stay visible so bad answers can be debugged.
 - **Open item:** written confirmation from the manager that sending aggregated client data to the OpenAI API is approved. OpenAI does not train on API data by default.
 
 ### 2.10 Web security

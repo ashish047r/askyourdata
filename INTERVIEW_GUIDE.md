@@ -402,7 +402,7 @@ python manage.py run_evals --calibrate-judge                        # judge vs y
 | **QueryLog** (Django admin) | Every question: SQL, answer, status, time per step, tokens, cost, cache hit, 👍/👎 | Find failures, slow queries and costly users |
 | **Admin header** | Total count, total cost and average latency for any filter | A quick health check |
 | **Langfuse** | A timeline of each request: every graph step and AI call, with tokens and time | Debug *why* one answer was slow or wrong |
-| **Masking** | Client numbers are **hidden** before traces leave our server | Client data never goes to a third-party tracing service |
+| **Masking** | Raw result rows and vectors are **hidden** before traces leave our server; the short final answer stays visible | The tracing service never sees the client's full data, but we can still debug a bad answer |
 | **Cost** | Per-query cost, the daily cap per user, the OpenAI monthly limit | Protects my own money |
 
 ### Feedback loop (👍/👎)

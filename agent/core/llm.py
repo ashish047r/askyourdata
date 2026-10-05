@@ -61,7 +61,7 @@ _DATA_BLOCK = re.compile(r"<(data|result)>.*?</\1>", re.S)
 
 
 def mask(*, data, **_):
-    """Client analytics never leave our server in traces: query results and vectors are masked."""
+    """Raw query results and vectors are masked in traces; the short final answer stays visible for debugging."""
     if isinstance(data, str):
         return _DATA_BLOCK.sub(r"<\1>[masked]</\1>", data)
     if isinstance(data, dict):

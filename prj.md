@@ -407,7 +407,7 @@ AskView.post
   - The header shows count, total cost and average latency for the current filter.
 - **Langfuse** (set `LANGFUSE_PUBLIC_KEY` / `LANGFUSE_SECRET_KEY`):
   - One trace per ask, with spans for each graph node and LLM call, tokens, latency, and user and client metadata.
-  - **Client data never leaves the server:** `mask()` hides result rows, vectors and `<data>` blocks.
+  - **Raw client data stays out of traces:** `mask()` hides result rows, vectors and `<data>` blocks; only the short final answer (a few headline numbers) is traced, for debugging.
 - **Feedback loop:** 👎 answers can be filtered in admin. Each real 👎 question, once you write its correct SQL, becomes a new golden case. That's how the eval set grows from production traffic.
 - **Cost:** per-query `cost_usd`, the daily cap per user, and a monthly hard limit set in the OpenAI dashboard as a backstop.
 - **Health:** `/healthz` for Render. Sync failures make the GitHub Action fail, and GitHub emails you.
